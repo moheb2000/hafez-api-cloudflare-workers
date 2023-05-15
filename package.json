@@ -1,0 +1,26 @@
+{
+  "name": "hafez-api-cloudflare-workers",
+  "version": "1.0.0",
+  "description": "A simple API for Hafez poems written with hono",
+  "main": "app.js",
+  "scripts": {
+    "dev": "wrangler dev --minify src/app.js",
+    "deploy": "wrangler publish --minify src/app.js"
+  },
+  "dependencies": {
+    "hono": "^3.1.8"
+  },
+  "devDependencies": {
+    "wrangler": "^2.20.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moheb2000/hafez-api-cloudflare-workers.git"
+  },
+  "author": "Mohammad Ebrahimi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/moheb2000/hafez-api-cloudflare-workers/issues"
+  },
+  "homepage": "https://github.com/moheb2000/hafez-api-cloudflare-workers#readme"
+}
