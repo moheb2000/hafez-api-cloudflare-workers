@@ -159,6 +159,7 @@ components:
           $ref: "#/components/schemas/start"
         end:
           type: integer
+          example: 1
         poems:
           type: array
           minItems: 1
