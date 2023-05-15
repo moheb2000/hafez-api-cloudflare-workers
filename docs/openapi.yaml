@@ -1,0 +1,208 @@
+openapi: 3.0.0
+info:
+  title: Hafez API
+  description: |
+    این برنامه، تلاشی برای نصب و اجرای یک API روی cloudflare workers بوده است. برای مشاهده سورس کد و آموزش روش نصب می توانید به [صفحه گیت هاب پروژه](https://github.com/moheb2000/hafez-api-cloudflare-workers) مراجعه کنید.
+
+    با استفاده از این API می توانید به غزلبات حافظ دسترسی داشته باشید. همچنین می توانید غزل تصادفی نیز دریافت کنید. به دلیل محدودیت حجم یک مگابایتی برای آپلود کد در cloudflare workers امکان اضافه کردن فال به API وجود ندارد اما می توانید از API گنجور برای گرفتن فال استفاده کنید یا خودتان با کمی تغییر در این API این ویژگی را به آن اضافه کنید.
+
+    **توجه کنید در ابتدای هر endpoint نسخه API نیز قرار می گیرد. برای مثال اگر این API را روی سرور یا سیستم خود راه اندازی کنید، /poems را به صورت /v1/poems درخواست دهید.**
+  version: 1.0.0
+servers:
+  - url: https://hafez.moheb2000.workers.dev/v1
+    description: v1
+paths:
+  /:
+    get:
+      summary: دریافت نسخه API و تعداد غزل های موجود
+      description: |
+        نام گذاری ویرایش های API به صورت major.minor.micro است که در این درخواست، می توانید دریافت کنید. همچنین تعداد غزل های فعلی، ۴۹۵ می باشد اما برای دریافت تعداد دقیق در هر زمان، از این درخواست، استفاده کنید.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/root"
+  /poems:
+    get:
+      summary: دریافت چند غزل به طور همزمان
+      description: |
+        در این درخواست می توانید چند غزل را به طور همزمان دریافت کنید. با دادن مقدار به پارامتر limit تعداد غزل های دریافتی را مشخص کنید. این مقدار حداکثر می تواند ۱۰ باشد و مقدار پیشفرض آن نیز ۱۰ است. در صورتی که مقدار limit معتبر نباشد، مقدار پیشفرض آن یعنی ۱۰ در نظر گرفته می شود.
+
+        شماره اولین غزل را می توانید با دادن مقدار به پارامتر start مشخص کنید. API با دو پارامتر start و limit مقدار end را محاسبه می کند. اگر شماره غزل پایانی معتبر نباشد، غزل پایانی همان غزل ۴۹۵ خواهد بود. اگر به پارامتر start مقداری بیشتر از شماره آخرین غزل یعنی ۴۹۵ داده شود خطای Bad request با کد ۴۰۰ برگردانده می شود.
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/start"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/poems"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badrequest"
+  /poems/{id}:
+    get:
+      summary: دریافت غزل با id
+      description: |
+        با دادن id غزل می توانید آن را با این درخواست دریافت کنید. در صورتی که id داده شده عدد صحیح نباشد خطای Bad request با کد ۴۰۰ برگردانده می شود. اگر id داده شده عدد صحیح باشد ولی غزلی با آن id وجود نداشته باشد خطای Not found با کد ۴۰۴ برگردانده می شود.
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/poem"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badrequest"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/notfound"
+  /poems/random:
+    get:
+      summary: دریافت یک غزل تصادفی
+      description: |
+        با این درخواست API یک غزل تصادفی را برای شما ارسال می کند.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/poem"
+
+components:
+  schemas:
+    root:
+      type: object
+      properties:
+        version:
+          type: object
+          properties:
+            major:
+              type: integer
+              example: 1
+            minor:
+              type: integer
+              example: 0
+            micro:
+              type: integer
+              example: 0
+        poemcount:
+          type: integer
+          example: 495
+    limit:
+      type: integer
+      example: 1
+    start:
+      type: integer
+      example: 1
+    id:
+      type: integer
+      example: 1
+    poem:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        title:
+          type: string
+          example: غزل شماره ۱
+        versecount:
+          type: integer
+          example: 7
+        verses:
+          type: array
+          minItems: 1
+          example:
+            - - اَلا یا اَیُّهَا السّاقی اَدِرْ کَأسَاً و ناوِلْها
+              - که عشق آسان نمود اوّل ولی افتاد مشکل‌ها
+            - - به بویِ نافه‌ای کآخر صبا زان طُرّه بگشاید
+              - ز تابِ جَعدِ مشکینش چه خون افتاد در دل‌ها
+            - - مرا در منزلِ جانان چه امنِ عیش چون هر دَم
+              - جَرَس فریاد می‌دارد که بَربندید مَحمِل‌ها
+            - - به مِی سجّاده رنگین کن گَرت پیرِ مُغان گوید
+              - که سالِک بی‌خبر نَبوَد ز راه و رسمِ منزل‌ها
+            - - شبِ تاریک و بیمِ موج و گردابی چنین هایل
+              - کجا دانند حالِ ما سبکبارانِ ساحل‌ها
+            - - همه کارم ز خودکامی به بدنامی کشید آخر
+              - نهان کِی مانَد آن رازی کزو سازند محفل‌ها
+            - - حضوری گر همی‌خواهی از او غایب مشو حافظ
+              - مَتٰی ما تَلْقَ مَنْ تَهْویٰ دَعِ الدُّنْیا و اَهْمِلْها
+          items:
+            type: array
+            minItems: 2
+            maxItems: 2
+            items:
+              type: string
+    poems:
+      type: object
+      properties:
+        limit:
+          $ref: "#/components/schemas/limit"
+        start:
+          $ref: "#/components/schemas/start"
+        end:
+          type: integer
+        poems:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/poem"
+    badrequest:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Bad request
+    notfound:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Not found
+  parameters:
+    limit:
+      name: limit
+      in: query
+      schema:
+        $ref: "#/components/schemas/limit"
+      examples:
+        validLimit:
+          value: 5
+    start:
+      name: start
+      in: query
+      schema:
+        $ref: "#/components/schemas/start"
+      examples:
+        validStart:
+          value: 100
+        badRequest:
+          value: 500
+    id:
+      name: id
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/id"
+      examples:
+        validId:
+          value: 140
+        notFoundId:
+          value: 500

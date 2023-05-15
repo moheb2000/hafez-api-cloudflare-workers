@@ -1,0 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap");
+.description,
+.opblock-description,
+.opblock-summary-description {
+  direction: rtl;
+}
+.swagger-ui .renderedMarkdown p,
+.swagger-ui .renderedMarkdown a,
+.opblock-description,
+.swagger-ui .opblock .opblock-summary-description {
+  font-family: "Vazirmatn", sans-serif;
+  font-size: 1rem;
+}
