@@ -1,7 +1,10 @@
 const { Hono } = require('hono');
+const { cors } = require('hono/cors');
 const v1 = require('./routes/v1');
 
 const app = new Hono();
+
+app.use('/*', cors());
 
 app.get('/', (c) => {
   return c.json({
