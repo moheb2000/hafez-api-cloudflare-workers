@@ -5,6 +5,10 @@
 ```
 git clone https://github.com/moheb2000/hafez-api-cloudflare-workers.git
 ```
+ابتدا وابستگی های لازم برای API را نصب کنید:
+```
+npm install
+```
 برای تست و اجرای API روی سرور لوکال دستور زیر را اجرا کنید:
 ```
 npm run dev
