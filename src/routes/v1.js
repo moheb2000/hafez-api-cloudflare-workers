@@ -17,13 +17,21 @@ const generatePoemJson = (id) => {
   };
 };
 
+const generateVerseJson = (poem, verseId) => {
+  return {
+    poemid: poem.id,
+    versenumber: verseId + 1,
+    verse: poem.verses[verseId],
+  };
+}
+
 const v1 = new Hono();
 
 v1.get('/', (c) => {
   return c.json({
     version: {
       major: 1,
-      minor: 0,
+      minor: 1,
       micro: 0,
     },
     poemcount: database.length,
@@ -77,6 +85,69 @@ v1.get('/poems/:id', (c) => {
   }
 
   return c.json(generatePoemJson(id));
+});
+
+v1.get('/poems/verse/random', (c) => {
+  const randomId = Math.floor(Math.random() * database.length) + 1;
+  const poem = generatePoemJson(randomId);
+  const randomVerseId = Math.floor(Math.random() * poem.versecount);
+
+  return c.json(generateVerseJson(poem, randomVerseId));
+});
+
+v1.get('/poems/:id/verse/random', (c) => {
+  const id = parseInt(c.req.param('id'));
+
+  if (isNaN(id)) {
+    return c.json({
+      error: 'Bad request',
+    }, 400);
+  }
+
+  if (id <= 0 || id > database.length) {
+    return c.json({
+      error: 'Not Found',
+    }, 404);
+  }
+
+  const poem = generatePoemJson(id);
+  const randomVerseId = Math.floor(Math.random() * poem.versecount);
+
+  return c.json(generateVerseJson(poem, randomVerseId));
+});
+
+v1.get('/poems/:id/verse/:versenumber', (c) => {
+  const id = parseInt(c.req.param('id'));
+
+  if (isNaN(id)) {
+    return c.json({
+      error: 'Bad request',
+    }, 400);
+  }
+
+  if (id <= 0 || id > database.length) {
+    return c.json({
+      error: 'Not Found',
+    }, 404);
+  }
+
+  const versenumber = parseInt(c.req.param('versenumber'));
+
+  const poem = generatePoemJson(id);
+
+  if (isNaN(versenumber)) {
+    return c.json({
+      error: 'Bad request',
+    }, 400);
+  }
+
+  if (versenumber <= 0 || versenumber > poem.versecount) {
+    return c.json({
+      error: 'Not Found',
+    }, 404);
+  }
+  
+  return c.json(generateVerseJson(poem, versenumber - 1));
 });
 
 module.exports = v1;
