@@ -7,7 +7,7 @@ info:
     با استفاده از این API می توانید به غزلبات حافظ دسترسی داشته باشید. همچنین می توانید غزل تصادفی نیز دریافت کنید. به دلیل محدودیت حجم یک مگابایتی برای آپلود کد در cloudflare workers امکان اضافه کردن فال به API وجود ندارد اما می توانید از API گنجور برای گرفتن فال استفاده کنید یا خودتان با کمی تغییر در این API این ویژگی را به آن اضافه کنید.
 
     **توجه کنید در ابتدای هر endpoint نسخه API نیز قرار می گیرد. برای مثال اگر این API را روی سرور یا سیستم خود راه اندازی کنید، /poems را به صورت /v1/poems درخواست دهید.**
-  version: 1.0.0
+  version: 1.1.0
 servers:
   - url: https://hafez.moheb2000.workers.dev/v1
     description: v1
@@ -85,6 +85,71 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/poem"
+  /poems/verse/random:
+    get:
+      summary: دریافت بیت تصادفی
+      description: |
+        با این درخواست، یک بیت تصادفی از بین تمام غزل های حافظ برای شما ارسال می شود.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/verse"
+  /poems/{id}/verse/random:
+    get:
+      summary: دریافت بیت تصادفی از غزل مشخص
+      description: |
+        با مشخص کردن id غزل حافظ، این درخواست یک بیت تصادفی از همان غزل را برای شما ارسال می کند. در صورتی که id داده شده عدد صحیح نباشد خطای Bad request با کد ۴۰۰ برگردانده می شود. اگر id داده شده عدد صحیح باشد ولی غزلی با آن id وجود نداشته باشد خطای Not found با کد ۴۰۴ برگردانده می شود.
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/verse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badrequest"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/notfound"
+  /poems/{id}/verse/{versenumber}:
+    get:
+      summary: دریافت بیت با شماره آن از غزل مشخص
+      description: |
+        با دادن id غزل و شماره بیت، API بیت خواسته شده را به شما برمی گرداند. در صورتی که id داده شده عدد صحیح نباشد خطای Bad request با کد ۴۰۰ برگردانده می شود. اگر id داده شده عدد صحیح باشد ولی غزلی با آن id وجود نداشته باشد خطای Not found با کد ۴۰۴ برگردانده می شود. همین شرایط برای شماره بیت نیز وجود دارد.
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/versenumber"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/verse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badrequest"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/notfound"
 
 components:
   schemas:
@@ -165,6 +230,27 @@ components:
           minItems: 1
           items:
             $ref: "#/components/schemas/poem"
+    verse:
+      type: object
+      properties:
+        poemid:
+          type: integer
+          example: 1
+        versenumber:
+          type: integer
+          example: 1
+        verse:
+          type: array
+          minItems: 2
+          maxItems: 2
+          example:
+            - "اَلا یا اَیُّهَا السّاقی اَدِرْ کَأسَاً و ناوِلْها"
+            - "که عشق آسان نمود اوّل ولی افتاد مشکل‌ها"
+          items:
+            type: string
+    versenumber:
+      type: integer
+      example: 1
     badrequest:
       type: object
       properties:
@@ -207,3 +293,14 @@ components:
           value: 140
         notFoundId:
           value: 500
+    versenumber:
+      name: versenumber
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/versenumber"
+      examples:
+        validVersenumber:
+          value: 1
+        notFoundVersenumber:
+          value: 100
