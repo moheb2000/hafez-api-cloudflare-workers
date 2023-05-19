@@ -5,12 +5,15 @@
   "main": "app.js",
   "scripts": {
     "dev": "wrangler dev --minify src/app.js",
-    "deploy": "wrangler publish --minify src/app.js"
+    "deploy": "wrangler publish --minify src/app.js",
+    "test": "mocha"
   },
   "dependencies": {
     "hono": "^3.1.8"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
     "wrangler": "^2.20.0"
   },
   "repository": {
