@@ -50,17 +50,17 @@ describe('Test helper functions', () => {
 describe('Test API calls', () => {
   let worker;
 
+  before(async () => {
+    return worker = await unstable_dev("src/app.js", {
+      experimental: { disableExperimentalWarning: true },
+    });
+  });
+
+  after(async () => {
+    return await worker.stop();
+  });
+
   describe('GET /', () => {
-    before(async () => {
-      return worker = await unstable_dev("src/app.js", {
-        experimental: { disableExperimentalWarning: true },
-      });
-    });
-
-    after(async () => {
-      return await worker.stop();
-    });
-
     it('returns an object', async () => {
       const resp = await worker.fetch();
       if (resp) {
@@ -86,16 +86,6 @@ describe('Test API calls', () => {
   });
 
   describe('GET /v1', () => {
-    before(async () => {
-      return worker = await unstable_dev("src/app.js", {
-        experimental: { disableExperimentalWarning: true },
-      });
-    });
-
-    after(async () => {
-      return await worker.stop();
-    });
-
     it('returns an object', async () => {
       const resp = await worker.fetch('/v1');
       if (resp) {
@@ -134,16 +124,6 @@ describe('Test API calls', () => {
   });
 
   describe('GET /v1/poems', () => {
-    before(async () => {
-      return worker = await unstable_dev("src/app.js", {
-        experimental: { disableExperimentalWarning: true },
-      });
-    });
-
-    after(async () => {
-      return await worker.stop();
-    });
-
     it('returns an object', async () => {
       const resp = await worker.fetch('/v1/poems');
       if (resp) {
@@ -250,16 +230,6 @@ describe('Test API calls', () => {
   });
 
   describe('GET /v1/poems/random', () => {
-    before(async () => {
-      return worker = await unstable_dev("src/app.js", {
-        experimental: { disableExperimentalWarning: true },
-      });
-    });
-
-    after(async () => {
-      return await worker.stop();
-    });
-
     it('returns an object', async () => {
       const resp = await worker.fetch('/v1/poems/random');
       if (resp) {
@@ -277,16 +247,6 @@ describe('Test API calls', () => {
   });
 
   describe('GET /v1/poems/:id', () => {
-    before(async () => {
-      return worker = await unstable_dev("src/app.js", {
-        experimental: { disableExperimentalWarning: true },
-      });
-    });
-
-    after(async () => {
-      return await worker.stop();
-    });
-
     it('returns an object', async () => {
       const resp = await worker.fetch('/v1/poems/1');
       if (resp) {
@@ -349,16 +309,6 @@ describe('Test API calls', () => {
   });
 
   describe('GET /v1/poems/verse/random', () => {
-    before(async () => {
-      return worker = await unstable_dev("src/app.js", {
-        experimental: { disableExperimentalWarning: true },
-      });
-    });
-
-    after(async () => {
-      return await worker.stop();
-    });
-
     it('returns an object', async () => {
       const resp = await worker.fetch('/v1/poems/verse/random');
       if (resp) {
@@ -376,16 +326,6 @@ describe('Test API calls', () => {
   });
 
   describe('GET /v1/poems/:id/verse/random', () => {
-    before(async () => {
-      return worker = await unstable_dev("src/app.js", {
-        experimental: { disableExperimentalWarning: true },
-      });
-    });
-
-    after(async () => {
-      return await worker.stop();
-    });
-
     it('returns an object', async () => {
       const resp = await worker.fetch('/v1/poems/1/verse/random');
       if (resp) {
@@ -435,16 +375,6 @@ describe('Test API calls', () => {
   });
 
   describe('GET /v1/poems/:id/verse/:versenumber', () => {
-    before(async () => {
-      return worker = await unstable_dev("src/app.js", {
-        experimental: { disableExperimentalWarning: true },
-      });
-    });
-
-    after(async () => {
-      return await worker.stop();
-    });
-
     it('returns an object', async () => {
       const resp = await worker.fetch('/v1/poems/1/verse/1');
       if (resp) {
