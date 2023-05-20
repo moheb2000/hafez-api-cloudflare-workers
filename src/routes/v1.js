@@ -57,7 +57,7 @@ v1.get('/poems/:id', (c) => {
 
   if (id <= 0 || id > database.length) {
     return c.json({
-      error: 'Not Found',
+      error: 'Not found',
     }, 404);
   }
 
@@ -83,7 +83,7 @@ v1.get('/poems/:id/verse/random', (c) => {
 
   if (id <= 0 || id > database.length) {
     return c.json({
-      error: 'Not Found',
+      error: 'Not found',
     }, 404);
   }
 
@@ -104,7 +104,7 @@ v1.get('/poems/:id/verse/:versenumber', (c) => {
 
   if (id <= 0 || id > database.length) {
     return c.json({
-      error: 'Not Found',
+      error: 'Not found',
     }, 404);
   }
 
@@ -120,7 +120,7 @@ v1.get('/poems/:id/verse/:versenumber', (c) => {
 
   if (versenumber <= 0 || versenumber > poem.versecount) {
     return c.json({
-      error: 'Not Found',
+      error: 'Not found',
     }, 404);
   }
   
