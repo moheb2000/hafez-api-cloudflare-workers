@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 
 const { numberToPersian, generatePoemJson, generateVerseJson } = require('../src/utils/helper');
 const packageJson = require('../package.json');
-const database = require('../src/db/database.json')
+const database = require('../src/db/database.json');
 const { unstable_dev } = require("wrangler");
 
 const poem = {
@@ -105,11 +105,11 @@ describe('Test API calls', () => {
       const resp = await worker.fetch('/v1');
       if (resp) {
         const json = await resp.json();
-        const versionList = packageJson.version.split('.');
+        const versionList = packageJson.version.split('.').map(Number);
         expect(json.version).to.deep.equal({
-          major: parseInt(versionList[0]),
-          minor: parseInt(versionList[1]),
-          micro: parseInt(versionList[2]),
+          major: versionList[0],
+          minor: versionList[1],
+          micro: versionList[2],
         });
       }
     });

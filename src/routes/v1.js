@@ -1,15 +1,17 @@
 const { Hono } = require('hono');
 const database = require('../db/database.json');
 const { generatePoemJson, generateVerseJson } = require('../utils/helper');
+const packageJson = require('../../package.json');
 
 const v1 = new Hono();
 
 v1.get('/', (c) => {
+  const versionList = packageJson.version.split('.').map(Number);
   return c.json({
     version: {
-      major: 1,
-      minor: 1,
-      micro: 0,
+      major: versionList[0],
+      minor: versionList[1],
+      micro: versionList[2],
     },
     poemcount: database.length,
   });
