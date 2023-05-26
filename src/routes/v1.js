@@ -1,4 +1,4 @@
-const { Hono } = require('hono');
+const { Hono } = require('hono/tiny');
 const database = require('../db/database.json');
 const { generatePoemJson, generateVerseJson } = require('../utils/helper');
 const packageJson = require('../../package.json');

@@ -1,4 +1,4 @@
-const { Hono } = require('hono');
+const { Hono } = require('hono/tiny');
 const { cors } = require('hono/cors');
 const v1 = require('./routes/v1');
 

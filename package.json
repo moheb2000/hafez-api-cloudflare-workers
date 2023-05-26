@@ -4,7 +4,7 @@
   "description": "A simple API for Hafez poems written with hono",
   "main": "app.js",
   "scripts": {
-    "dev": "wrangler dev --minify src/app.js",
+    "dev": "wrangler dev --minify --remote src/app.js",
     "deploy": "wrangler publish --minify src/app.js",
     "test": "mocha"
   },
