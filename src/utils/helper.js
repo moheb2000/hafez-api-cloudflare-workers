@@ -1,4 +1,5 @@
 const database = require('../db/database.json');
+const faal = require('../db/faal.json');
 
 const numberToPersian = (num) => {
   const persianNumberArray = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -13,6 +14,7 @@ const generatePoemJson = (id) => {
     title: `غزل شماره ${numberToPersian(id)}`,
     versecount: database[id - 1].length,
     verses: database[id - 1],
+    description: faal[id - 1],
   };
 };
 

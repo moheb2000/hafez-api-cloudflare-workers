@@ -3,6 +3,7 @@ const expect = require('chai').expect;
 const { numberToPersian, generatePoemJson, generateVerseJson } = require('../src/utils/helper');
 const packageJson = require('../package.json');
 const database = require('../src/db/database.json');
+const faal = require('../src/db/faal.json');
 const { unstable_dev } = require("wrangler");
 
 const poem = {
@@ -10,6 +11,7 @@ const poem = {
   title: 'غزل شماره ۱',
   versecount: 7,
   verses: database[0],
+  description: faal[0],
 };
 
 const verse = {
